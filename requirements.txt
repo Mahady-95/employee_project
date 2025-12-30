@@ -1,0 +1,15 @@
+Django
+coverage
+pytest
+pytest-django
+flake8
+black
+requests
+python-dotenv
+psycopg2-binary
+mysqlclient
+reportlab
+openpyxl
+matplotlib
+seaborn
+pandas

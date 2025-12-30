@@ -1,0 +1,14 @@
+{% extends "employee_register/base.html" %}
+
+{% block content %}
+<h3>Employee Chart</h3>
+
+<img src="data:image/png;base64,{{ chart }}" alt="Employee Chart">
+
+<br><br>
+
+<a href="{% url 'employee_list' %}" class="btn btn-secondary">
+    ← Back to Employee List
+</a>
+
+{% endblock %}

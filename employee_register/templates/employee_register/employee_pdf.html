@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 6px;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h2>Employee Report</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Mobile</th>
+                <th>Position</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employee_list %}
+            <tr>
+                <td>{{ employee.fullname }}</td>
+                <td>{{ employee.mobile }}</td>
+                <td>{{ employee.position }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
