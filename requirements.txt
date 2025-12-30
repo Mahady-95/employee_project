@@ -6,6 +6,7 @@ pytest-django
 flake8
 black
 requests
+crispy_forms
 python-dotenv
 psycopg2-binary
 mysqlclient
