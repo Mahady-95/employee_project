@@ -1,12 +1,14 @@
 Django
+
 django-crispy-forms
-crispy-bootstrap4
-crispy-bootstrap5
+crispy-bootstrap4git 
+
 cryptography
 
 coverage
 pytest
 pytest-django
+
 pymysql
 mysqlclient
 psycopg2-binary
@@ -19,6 +21,4 @@ python-dotenv
 reportlab
 xhtml2pdf
 openpyxl
-# matplotlib
-# seaborn
 pandas
