@@ -1,6 +1,7 @@
 Django
 coverage
 pytest
+pymysql
 pytest-django
 flake8
 black

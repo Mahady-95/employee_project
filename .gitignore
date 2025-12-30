@@ -6,3 +6,5 @@ env/
 .DS_Store
 *.log
 *.sqlite3-journal
+key.txt
+key.txt.pub
