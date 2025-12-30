@@ -1,5 +1,4 @@
 Django
-
 django-crispy-forms
 crispy-bootstrap4
 
@@ -22,4 +21,3 @@ reportlab
 xhtml2pdf
 openpyxl
 pandas
-pycairo
