@@ -1,7 +1,7 @@
 Django
 
 django-crispy-forms
-crispy-bootstrap4git 
+crispy-bootstrap4
 
 cryptography
 
