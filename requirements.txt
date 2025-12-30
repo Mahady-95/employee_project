@@ -17,6 +17,7 @@ requests
 python-dotenv
 
 reportlab
+xhtml2pdf
 openpyxl
 matplotlib
 seaborn
