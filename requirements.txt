@@ -2,6 +2,7 @@ Django
 django-crispy-forms
 crispy-bootstrap4
 crispy-bootstrap5
+cryptography
 
 coverage
 pytest
