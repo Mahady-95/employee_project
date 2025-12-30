@@ -19,6 +19,6 @@ python-dotenv
 reportlab
 xhtml2pdf
 openpyxl
-matplotlib
-seaborn
+# matplotlib
+# seaborn
 pandas
