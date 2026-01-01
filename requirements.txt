@@ -20,4 +20,5 @@ python-dotenv
 reportlab
 xhtml2pdf
 openpyxl
+matplotlib
 pandas
