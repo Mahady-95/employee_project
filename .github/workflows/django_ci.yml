@@ -133,3 +133,10 @@ jobs:
     - name: Run tests
       run: |
         python manage.py test
+        
+    - name: Run tests with coverage
+      run: |
+        coverage run manage.py test
+        coverage report --fail-under=70
+
+
