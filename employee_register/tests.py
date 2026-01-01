@@ -17,5 +17,5 @@ class EmployeeTest(TestCase):
 
         self.assertEqual(emp.position.id, position.id)
         self.assertEqual(emp.position.title, "Manager")
-        self.assertEqual(1, 2)
+        #self.assertEqual(1, 2)
 
