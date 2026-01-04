@@ -9,7 +9,7 @@ class EmployeeTest(TestCase):
 
     # Create
     def setUp(self):
-        self.position = Position.objects.create(title="Developer") #Checing ORM mapping
+        self.position = Position.objects.create(title="Manager") #Checing ORM mapping
 
     def test_employee_creation(self):
         emp = Employee.objects.create(
@@ -20,7 +20,7 @@ class EmployeeTest(TestCase):
         )
 
         self.assertEqual(emp.position.id, self.position.id)
-        self.assertEqual(emp.position.title, "Developer")
+        self.assertEqual(emp.position.title, "Manager")
     
     #Update
     def test_employee_update(self):
