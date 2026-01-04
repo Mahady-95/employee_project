@@ -13,7 +13,7 @@ class EmployeeTest(TestCase):
 
     def test_employee_creation(self):
         emp = Employee.objects.create(
-            fullname="Ashek",
+            fullname="Chorki",
             emp_code="707",
             mobile="01900000000",
             position=self.position
