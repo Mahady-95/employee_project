@@ -9,18 +9,18 @@ class EmployeeTest(TestCase):
 
     # Create
     def setUp(self):
-        self.position = Position.objects.create(title="Manager") #Checing ORM mapping
+        self.position = Position.objects.create(title="HR") #Checing ORM mapping
 
     def test_employee_creation(self):
         emp = Employee.objects.create(
-            fullname="Chorki",
+            fullname="Chorki TV",
             emp_code="707",
             mobile="01900000000",
             position=self.position
         )
 
         self.assertEqual(emp.position.id, self.position.id)
-        self.assertEqual(emp.position.title, "Manager")
+        self.assertEqual(emp.position.title, "HR")
     
     #Update
     def test_employee_update(self):
