@@ -71,6 +71,8 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = 'employee_project.wsgi.application'
 
 
@@ -177,3 +179,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'employee_list'
+LOGOUT_REDIRECT_URL = 'login'
+

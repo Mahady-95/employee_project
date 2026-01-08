@@ -11,13 +11,47 @@ import io
 import base64
 from django.db.models import Count
 
-# Create your views here.
-def employee_list (request):
-    context = {
-        'employee_list': Employee.objects.all()
-        }
-    return render(request, "employee_register/employee_list.html", context)
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
+
+
+
+
+# Create your views here.
+# Search + Pagination
+@login_required
+def employee_list(request):
+    print("EMPLOYEE LIST VIEW HIT")
+    q = request.GET.get('q', '')
+    sort = request.GET.get('sort', 'name')
+
+    employees = Employee.objects.all()
+
+    if q:
+        employees = employees.filter(
+            Q(fullname__icontains=q) |
+            Q(mobile__icontains=q) |
+            Q(position__title__icontains=q)
+        )
+
+    if sort == 'position':
+        employees = employees.order_by('position__title')
+    else:
+        employees = employees.order_by('fullname')
+
+    paginator = Paginator(employees, 5)
+    page = request.GET.get('page')
+    employee_list = paginator.get_page(page)
+
+    return render(request, 'employee_register/employee_list.html', {
+        'employee_list': employee_list,
+        'search_query': q,
+        'sort': sort,
+    })
+
+@login_required
 def employee_form(request, id=0):
     if request.method == "GET":
         if id == 0:
@@ -35,12 +69,15 @@ def employee_form(request, id=0):
         if form.is_valid():
             form.save()
         return redirect('/employee/list') 
+    
+@login_required
 def employee_delete(request,id):
     employee = Employee.objects.get(pk=id)
     employee.delete()
     return redirect('/employee/list') 
 
 
+@login_required
 def employee_pdf(request):
     employees = Employee.objects.all()
 
@@ -61,6 +98,7 @@ def employee_pdf(request):
 
 
 
+@login_required
 def employee_excel(request):
     wb = Workbook()
     ws = wb.active
@@ -92,6 +130,7 @@ def employee_excel(request):
 
 
 
+@login_required
 def employee_chart(request):
     # Group data
     data = (
