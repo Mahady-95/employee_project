@@ -9,11 +9,11 @@ class EmployeeTest(TestCase):
 
     # Create
     def setUp(self):
-        self.position = Position.objects.create(title="HR") #Checing ORM mapping
+        self.position = Position.objects.create(title="HR") #Checking ORM mapping
 
     def test_employee_creation(self):
         emp = Employee.objects.create(
-            fullname="Chorki TV",
+            fullname="Chorki Apple TV",
             emp_code="707",
             mobile="01900000000",
             position=self.position
