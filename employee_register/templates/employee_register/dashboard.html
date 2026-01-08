@@ -1,0 +1,81 @@
+{% extends "employee_register/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+
+<h4 class="mb-4">📊 Dashboard</h4>
+
+<!-- STATS -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h6>Total Employees</h6>
+            <h2>{{ total_employees }}</h2>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h6>Total Positions</h6>
+            <h2>{{ total_positions }}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+<!-- CHART -->
+<div class="col-md-6">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h6 class="mb-3">Employees by Position</h6>
+            <canvas id="employeeChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- RECENT LIST -->
+<div class="col-md-6">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h6 class="mb-3">Recent Employees</h6>
+            <table class="table table-sm">
+                {% for emp in recent_employees %}
+                <tr>
+                    <td>{{ emp.fullname }}</td>
+                    <td>{{ emp.position }}</td>
+                    <td>
+                        <form action="{% url 'employee_delete' emp.id %}" method="post" class="delete-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('employeeChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for c in chart_data %}"{{ c.position__title }}",{% endfor %}],
+        datasets: [{
+            data: [{% for c in chart_data %}{{ c.total }},{% endfor %}]
+        }]
+    }
+});
+</script>
+
+<script src="{% static 'employee_register/js/delete_confirm.js' %}"></script>
+{% endblock %}

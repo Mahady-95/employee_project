@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import EmployeeForm
-from .models import Employee
+from .models import Employee, Position
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -165,4 +165,25 @@ def employee_chart(request):
         'chart': graphic
     })
 
+#Dashboard
 
+def dashboard(request):
+    total_employees = Employee.objects.count()
+    total_positions = Position.objects.count()
+
+    recent_employees = Employee.objects.select_related(
+        'position'
+    ).order_by('-id')[:5]
+
+    chart_data = (
+        Employee.objects
+        .values('position__title')
+        .annotate(total=Count('id'))
+    )
+
+    return render(request, 'employee_register/dashboard.html', {
+        'total_employees': total_employees,
+        'total_positions': total_positions,
+        'recent_employees': recent_employees,
+        'chart_data': chart_data
+    })

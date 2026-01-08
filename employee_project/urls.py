@@ -19,17 +19,6 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-    # # path('employee/',include ('employee_register.urls')),
-    # # login / logout
-    # path('login/', auth_views.LoginView.as_view(
-    #     template_name='employee_register/login.html'
-    # ), name='login'),
-    # path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-
-    # # app urls
-    # path('employee/', include('employee_register.urls')),
-
     path('admin/', admin.site.urls),
 
     # login / logout
@@ -40,4 +29,5 @@ urlpatterns = [
 
     # employee app URLs
     path('employee/', include('employee_register.urls')),  # <-- MAKE SURE THIS LINE EXISTS
+    
 ]

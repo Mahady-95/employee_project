@@ -28,6 +28,7 @@ urlpatterns = [
     path('pdf/', views.employee_pdf, name='employee_pdf'),                  # download pdf
     path('excel/', views.employee_excel, name='employee_excel'),            # download excel
     path('chart/', views.employee_chart, name='employee_chart'),            # chart
+    path('dashboard/', views.dashboard, name='dashboard'),
 
 
    
