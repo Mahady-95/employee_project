@@ -14,7 +14,6 @@
         <div class="card-body">
             <form method="post" autocomplete="off">
                 {% csrf_token %}
-
                 {{ form.fullname|as_crispy_field }}
                 {{ form.mobile|as_crispy_field }}
 
