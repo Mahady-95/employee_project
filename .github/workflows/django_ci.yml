@@ -10,32 +10,51 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout source code
-      uses: actions/checkout@v4
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: employee_db
+          MYSQL_USER: root
+          MYSQL_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -u root -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
+    env:
+      DB_NAME: employee_db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-python@v5
       with:
         python-version: "3.10"
+        cache: "pip"
 
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libcairo2-dev pkg-config python3-dev
-        
-    - name: Install dependencies
+        sudo apt-get install -y default-libmysqlclient-dev build-essential
+
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
     - name: Run migrations
-      run: |
-        python manage.py migrate
+      run: python manage.py migrate
 
     - name: Run tests with coverage
       run: |
         coverage run manage.py test
         coverage report --fail-under=70
-
-
