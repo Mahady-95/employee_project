@@ -21,7 +21,7 @@
 
 #         self.assertEqual(emp.position.id, self.position.id)
 #         self.assertEqual(emp.position.title, "HR")
-    
+
 #     #Update
 #     def test_employee_update(self):
 #         emp = Employee.objects.create(
@@ -60,7 +60,6 @@
 #         self.assertEqual(Employee.objects.count(), 0)
 
 
-
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -72,8 +71,7 @@ class EmployeeTest(TestCase):
     def setUp(self):
         # 🔐 Create & login user (REQUIRED for login_required views)
         self.user = User.objects.create_user(
-            username="testuser",
-            password="testpass123"
+            username="testuser", password="testpass123"
         )
         self.client.login(username="testuser", password="testpass123")
 
@@ -86,7 +84,7 @@ class EmployeeTest(TestCase):
             fullname="Chorki Apple TV",
             emp_code="707",
             mobile="01900000000",
-            position=self.position
+            position=self.position,
         )
 
         self.assertEqual(emp.position.id, self.position.id)
@@ -99,7 +97,7 @@ class EmployeeTest(TestCase):
             fullname="Ashek",
             emp_code="707",
             mobile="01900000000",
-            position=self.position
+            position=self.position,
         )
 
         response = self.client.post(
@@ -109,7 +107,7 @@ class EmployeeTest(TestCase):
                 "emp_code": "002",
                 "mobile": "01800000000",
                 "position": self.position.id,
-            }
+            },
         )
 
         # 🔹 Ensure redirect after successful update
@@ -126,13 +124,10 @@ class EmployeeTest(TestCase):
             fullname="Mahady",
             emp_code="202",
             mobile="01800000000",
-            position=self.position
+            position=self.position,
         )
 
-        response = self.client.post(
-            reverse("employee_delete", args=[emp.id])
-        )
+        response = self.client.post(reverse("employee_delete", args=[emp.id]))
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Employee.objects.count(), 0)
-

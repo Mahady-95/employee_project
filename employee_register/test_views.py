@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Employee, Position
+
+# from .models import Employee, Position
+
 
 class EmployeeViewTest(TestCase):
 
