@@ -1,4 +1,4 @@
-name: Django CI with Docker
+name: Django CI
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     services:
       mysql:
         image: mysql:8.0
@@ -28,30 +29,36 @@ jobs:
       DB_PORT: 3306
 
     steps:
-    - name: Checkout source
+    - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Set up Python
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.10
+        python-version: "3.10"
         cache: "pip"
 
     - name: Install system dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          build-essential \
-          default-libmysqlclient-dev \
           libcairo2-dev \
           pkg-config \
           python3-dev \
+          default-libmysqlclient-dev \
+          build-essential \
           mysql-client
 
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+    - name: Format check with black
+      run: black --check .
+
+    - name: Lint with flake8
+      run: flake8 .
 
     - name: Wait for MySQL to be ready
       run: |
@@ -60,16 +67,10 @@ jobs:
           sleep 3
         done
 
-    - name: Run black check
-      run: black --check .
-
-    - name: Run flake8 lint
-      run: flake8 .
-
     - name: Run migrations
       run: python manage.py migrate
 
     - name: Run tests with coverage
       run: |
-        coverage run --source='.' manage.py test
+        coverage run manage.py test
         coverage report --fail-under=70
