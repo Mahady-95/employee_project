@@ -1,34 +1,22 @@
-version: "3.9"
+version: "3"
 
 services:
-  employee_db:
-    image: mysql:8.0
-    container_name: employee_db
-    restart: always
+  db:
+    image: mysql:8
     environment:
-      MYSQL_ROOT_PASSWORD: root   # root password
-      MYSQL_DATABASE: employee_db  # database নাম
+      MYSQL_DATABASE: employee_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
     ports:
       - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
 
-  employee_web:
+  web:
     build: .
-    container_name: employee_web
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app
+      - .:/code
     ports:
       - "8000:8000"
     depends_on:
-      - employee_db
-    environment:
-      DB_NAME: employee_db
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_HOST: employee_db
-      DB_PORT: 3306
-
-volumes:
-  db_data:
+      - db
