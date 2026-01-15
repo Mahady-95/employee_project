@@ -2,8 +2,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from employee_register.forms import CustomLoginForm
+from django.http import HttpResponseRedirect
+
+
+def home(request):
+    return HttpResponseRedirect("/employee/")
+
 
 urlpatterns = [
+    path("", home),
     path("admin/", admin.site.urls),
     # login / logout
     path(

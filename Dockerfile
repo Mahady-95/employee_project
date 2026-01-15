@@ -1,62 +1,33 @@
-# ==============================
-# Base Image
-# ==============================
-FROM python:3.10-slim
+FROM python:3.10-bullseye
 
-# ==============================
-# Python settings
-# ==============================
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
-# ==============================
-# Set working directory
-# ==============================
 WORKDIR /app
 
-# ==============================
-# Install OS dependencies for your requirements
-# ==============================
-RUN apt-get update && apt-get install -y --no-install-recommends \
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# system deps
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
     build-essential \
-    python3-dev \
-    gcc \
-    libpq-dev \
+    default-mysql-client \
     default-libmysqlclient-dev \
-    libffi-dev \
-    libjpeg-dev \
-    zlib1g-dev \
-    libfreetype6-dev \
-    libxml2-dev \
-    libxslt1-dev \
-    libcairo2-dev \
-    pkg-config \
-    curl \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+    gcc \
+    python3-dev \
+    netcat-openbsd \
+ && rm -rf /var/lib/apt/lists/*
 
-# ==============================
-# Copy requirements.txt first (for caching)
-# ==============================
+# pip
+RUN pip install --upgrade pip
+
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# ==============================
-# Upgrade pip & install Python deps
-# ==============================
-RUN pip install --upgrade pip setuptools wheel Cython \
-    && pip install --no-cache-dir -r requirements.txt
-
-# ==============================
-# Copy project files
-# ==============================
+# copy project
 COPY . .
 
-# ==============================
-# Expose port (adjust if needed)
-# ==============================
-EXPOSE 8000
+# entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# ==============================
-# Default command
-# ==============================
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

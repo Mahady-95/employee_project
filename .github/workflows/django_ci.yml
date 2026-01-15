@@ -25,52 +25,55 @@ jobs:
       DB_NAME: test_db
       DB_USER: test_user
       DB_PASSWORD: test_pass
-      DB_HOST: 127.0.0.1
+      DB_HOST: mysql   # ✅ must match service name
       DB_PORT: 3306
 
     steps:
-    - name: Checkout source code
-      uses: actions/checkout@v4
+      - name: Checkout source code
+        uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
-        cache: "pip"
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
 
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          libcairo2-dev \
-          pkg-config \
-          python3-dev \
-          default-libmysqlclient-dev \
-          build-essential \
-          mysql-client
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcairo2-dev \
+            pkg-config \
+            python3-dev \
+            default-libmysqlclient-dev \
+            build-essential \
+            mysql-client
 
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Format check with black
-      run: black --check .
+      - name: Format check with black
+        run: black --check .
 
-    - name: Lint with flake8
-      run: flake8 .
+      - name: Lint with flake8
+        run: flake8 .
 
-    - name: Wait for MySQL to be ready
-      run: |
-        until mysql -h 127.0.0.1 -u test_user -ptest_pass -e "SELECT 1"; do
-          echo "Waiting for MySQL..."
-          sleep 3
-        done
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysql -h mysql -u test_user -ptest_pass -e "SELECT 1"; do
+            echo "Waiting for MySQL..."
+            sleep 3
+          done
 
-    - name: Run migrations
-      run: python manage.py migrate
+      - name: Run migrations
+        run: python manage.py migrate --no-input
 
-    - name: Run tests with coverage
-      run: |
-        coverage run manage.py test
-        coverage report --fail-under=70
+      - name: Run Django checks
+        run: python manage.py check
+
+      - name: Run tests with coverage
+        run: |
+          coverage run manage.py test
+          coverage report --fail-under=70
