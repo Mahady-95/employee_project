@@ -101,7 +101,9 @@ WSGI_APPLICATION = "employee_project.wsgi.application"
 #         },
 #     }
 # }
-
+# 🔐 HARD SAFETY GUARD
+if os.getenv("USE_DOCKER") and os.getenv("DB_HOST") == "localhost":
+    raise Exception("❌ Docker must NOT use localhost DB")
 
 if os.getenv("GITHUB_ACTIONS"):
     # CI environment
@@ -111,6 +113,21 @@ if os.getenv("GITHUB_ACTIONS"):
             "NAME": BASE_DIR / "test.sqlite3",
         }
     }
+elif os.getenv("USE_DOCKER"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.getenv("DB_NAME"),
+            "USER": os.getenv("DB_USER"),
+            "PASSWORD": os.getenv("DB_PASSWORD"),
+            "HOST": os.getenv("DB_HOST"),
+            "PORT": os.getenv("DB_PORT", "3306"),
+            "OPTIONS": {
+                "charset": "utf8mb4",
+            },
+        }
+    }
+
 else:
     # Local environment
     DATABASES = {
@@ -128,6 +145,9 @@ else:
             },
         }
     }
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 
 # DATABASES = {
 #     "default": {

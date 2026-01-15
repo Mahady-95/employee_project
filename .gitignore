@@ -1,10 +1,30 @@
+# Coverage reports / pycache
+htmlcov/
 .coverage
+.pytest_cache/
+# VSCode / editor settings
+.vscode/
+.idea/
+*.swp
+# Docker volumes (auto created, no need to track)
+docker_mysql_data/
+# Docker / system
+*.env
+docker-compose.override.yml
+# Python cache / temp
 __pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
 *.pyc
+# Django secret / db files
 db.sqlite3
+# Virtual environment
 venv/
 env/
+
 .DS_Store
+# Django secret / db files
 *.log
 *.sqlite3-journal
 key.txt
