@@ -3,6 +3,9 @@ name: Django CI
 on:
   push:
     branches: ["main"]
+    paths:
+      - "**.py"
+      - "requirements*.txt"
   pull_request:
     branches: ["main"]
 
@@ -20,14 +23,18 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -ptest_pass"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     env:
       DB_NAME: test_db
       DB_USER: test_user
       DB_PASSWORD: test_pass
-      DB_HOST: mysql  # ✅ must match service name
+      DB_HOST: mysql
       DB_PORT: 3306
-      MYSQL_PWD: test_pass  # ✅ safer for CLI commands
 
     steps:
       - name: Checkout source code
@@ -43,12 +50,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            libcairo2-dev \
-            pkg-config \
-            python3-dev \
             default-libmysqlclient-dev \
-            build-essential \
-            netcat-openbsd  # ✅ use netcat to wait for MySQL
+            build-essential
 
       - name: Install Python dependencies
         run: |
@@ -60,15 +63,6 @@ jobs:
 
       - name: Lint with flake8
         run: flake8 .
-
-      - name: Wait for MySQL to be ready
-        run: |
-          echo "⏳ Waiting for MySQL at $DB_HOST:$DB_PORT..."
-          for i in {1..30}; do
-            nc -z $DB_HOST $DB_PORT && echo "✅ MySQL is up!" && break
-            echo "Waiting..."
-            sleep 2
-          done
 
       - name: Run migrations
         run: python manage.py migrate --no-input
