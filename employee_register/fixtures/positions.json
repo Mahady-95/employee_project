@@ -1,0 +1,5 @@
+[
+  {"model": "employee_register.position", "pk": 1, "fields": {"title": "Manager"}},
+  {"model": "employee_register.position", "pk": 2, "fields": {"title": "Developer"}},
+  {"model": "employee_register.position", "pk": 3, "fields": {"title": "Tester"}}
+]
