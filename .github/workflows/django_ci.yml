@@ -48,7 +48,7 @@ jobs:
             python3-dev \
             default-libmysqlclient-dev \
             build-essential \
-            netcat  # ✅ use netcat to wait for MySQL
+            netcat-openbsd  # ✅ use netcat to wait for MySQL
 
       - name: Install Python dependencies
         run: |
