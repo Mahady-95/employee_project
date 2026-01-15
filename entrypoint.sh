@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "⏳ Waiting for MySQL..."
+echo "⏳ Waiting for MySQL at $DB_HOST..."
 
 while ! mysqladmin ping -h "$DB_HOST" -u"$DB_USER" -p"$DB_PASSWORD" --silent; do
     sleep 2
