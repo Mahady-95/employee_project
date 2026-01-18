@@ -9,7 +9,6 @@ pytest
 pytest-django
 
 pymysql
-mysqlclient
 psycopg2-binary
 
 flake8
