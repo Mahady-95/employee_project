@@ -34,6 +34,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Check black version
+        run: black --version
+
       - name: Format check with black
         run: black --check .
 
