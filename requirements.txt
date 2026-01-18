@@ -9,11 +9,10 @@ pytest
 pytest-django
 
 pymysql
-mysqlclient
 psycopg2-binary
 
 flake8
-black
+black==25.12.0
 requests
 python-dotenv
 pre-commit
