@@ -1,29 +1,13 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
-# Ensure line endings are LF
-# 🟢 Important on Windows: run dos2unix entrypoint.sh before building
-
-echo "⏳ Waiting for MySQL at $DB_HOST:$DB_PORT..."
-
-# Wait for MySQL to be ready
-while ! nc -z $DB_HOST $DB_PORT; do
-  sleep 2
+echo "Waiting for database..."
+until nc -z "$DB_HOST" "$DB_PORT"; do
+  sleep 1
 done
+echo "Database is ready"
 
-echo "✅ MySQL is up. Running migrations..."
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput
 
-# Run migrations
-python manage.py migrate --no-input
-
-# Load positions fixture if exists
-if [ -f employee_register/fixtures/positions.json ]; then
-    echo "📂 Loading positions fixture..."
-    python manage.py loaddata employee_register/fixtures/positions.json
-fi
-
-# Collect static files (optional)
-python manage.py collectstatic --no-input 2>/dev/null || true
-
-# Execute default CMD
 exec "$@"
