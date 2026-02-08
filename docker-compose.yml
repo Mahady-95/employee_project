@@ -19,7 +19,7 @@ services:
   web:
     build: .
     env_file:
-      - .env.docker
+      - .env.docker   # ✅ Make sure this is included
     depends_on:
       db:
         condition: service_healthy
@@ -27,6 +27,4 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-    entrypoint: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-volumes:
-  docker_mysql_data:
+    entrypoint: ["/app/entrypoint.sh"]  # run Django server from entrypoint
