@@ -1,9 +1,8 @@
-version: "3.9"
-
 services:
   db:
     image: mysql:8.0
     container_name: employee_db_docker
+    restart: always
     env_file:
       - .env.docker
     volumes:
@@ -18,8 +17,16 @@ services:
 
   web:
     build: .
+    container_name: employee_project-web
+    restart: always
     env_file:
-      - .env.docker   # ✅ Make sure this is included
+      - .env.docker
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python manage.py collectstatic --noinput &&
+      gunicorn employee_project.wsgi:application --bind 0.0.0.0:8000
+      "
     depends_on:
       db:
         condition: service_healthy
@@ -27,4 +34,6 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-    entrypoint: ["/app/entrypoint.sh"]  # run Django server from entrypoint
+
+volumes:
+  docker_mysql_data:
