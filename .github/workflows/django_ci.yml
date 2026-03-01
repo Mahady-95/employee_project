@@ -1,4 +1,4 @@
-name: Django CI/CD
+name: Django CI
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - "**.py"
       - "requirements*.txt"
   pull_request:
-    branches: ["main", "develop"]
+    branches: ["main"]
 
 jobs:
   ci:
