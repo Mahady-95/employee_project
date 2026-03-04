@@ -2,66 +2,94 @@
 {% load static %}
 
 {% block content %}
-<div class="container-fluid">
 
-<h4 class="mb-4">📊 Dashboard</h4>
+<h4 class="mb-4 text-center text-md-left">📊 Dashboard</h4>
 
 <!-- STATS -->
 <div class="row mb-4">
-    <div class="col-md-6">
-        <div class="card shadow-sm p-3">
-            <h6>Total Employees</h6>
-            <h2>{{ total_employees }}</h2>
+    <div class="col-12 col-md-6 mb-3">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h6 class="text-muted">Total Employees</h6>
+                <h2 class="font-weight-bold">{{ total_employees }}</h2>
+            </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card shadow-sm p-3">
-            <h6>Total Positions</h6>
-            <h2>{{ total_positions }}</h2>
+
+    <div class="col-12 col-md-6 mb-3">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h6 class="text-muted">Total Positions</h6>
+                <h2 class="font-weight-bold">{{ total_positions }}</h2>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="row">
 
-<!-- CHART -->
-<div class="col-md-6">
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h6 class="mb-3">Employees by Position</h6>
-            <canvas id="employeeChart"></canvas>
+    <!-- CHART -->
+    <div class="col-12 col-lg-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6 class="mb-3">Employees by Position</h6>
+                <div style="height:300px;">
+                    <canvas id="employeeChart"></canvas>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- RECENT LIST -->
-<div class="col-md-6">
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h6 class="mb-3">Recent Employees</h6>
-            <table class="table table-sm">
-                {% for emp in recent_employees %}
-                <tr>
-                    <td>{{ emp.fullname }}</td>
-                    <td>{{ emp.position }}</td>
-                    <td>
-                        <form action="{% url 'employee_delete' emp.id %}" method="post" class="delete-form">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                Delete
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
+    <!-- RECENT LIST -->
+    <div class="col-12 col-lg-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6 class="mb-3">Recent Employees</h6>
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for emp in recent_employees %}
+                            <tr>
+                                <td>{{ emp.fullname }}</td>
+                                <td>{{ emp.position }}</td>
+                                <td class="text-right">
+                                    <form action="{% url 'employee_delete' emp.id %}"
+                                          method="post"
+                                          class="delete-form d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">
+                                    No recent employees
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
         </div>
     </div>
-</div>
 
 </div>
-</div>
 
+<!-- Chart JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const ctx = document.getElementById('employeeChart');
@@ -71,11 +99,18 @@ new Chart(ctx, {
     data: {
         labels: [{% for c in chart_data %}"{{ c.position__title }}",{% endfor %}],
         datasets: [{
-            data: [{% for c in chart_data %}{{ c.total }},{% endfor %}]
+            label: 'Employees',
+            data: [{% for c in chart_data %}{{ c.total }},{% endfor %}],
+            backgroundColor: 'rgba(220,53,69,0.6)'
         }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
     }
 });
 </script>
 
 <script src="{% static 'employee_register/js/delete_confirm.js' %}"></script>
+
 {% endblock %}
